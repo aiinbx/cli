@@ -11,6 +11,6 @@ npm install -g @aiinbx/cli
 irm https://aiinbx.com/install.ps1 | iex
 ```
 
-Docs: https://aiinbx.com/docs/cli
+More: https://aiinbx.com/features/cli
 
 This repository holds the release binaries and the agent skill (`npx skills add aiinbx/cli`).
