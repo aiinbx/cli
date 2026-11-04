@@ -30,7 +30,7 @@ The handler verifies with `verifyWebhook(rawBody, signature, process.env.AI_INBX
 started=$(date -u +%FT%TZ)
 curl -s -X POST https://app.example.com/signup -d email=qa+$RUN@yourdomain.com
 email=$(aiinbx wait --to "qa+$RUN@yourdomain.com" --since "$started" --timeout 2m --json) || exit 1
-code=$(echo "$email" | jq -r .stripped_text | grep -oE '[0-9]{6}' | head -1)
+code=$(echo "$email" | jq -er .verification.code) || exit 1
 ```
 
 - Use a unique address per run (`+tag`) so parallel runs don't take each other's mail.

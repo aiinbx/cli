@@ -12,7 +12,7 @@ license: MIT
 metadata:
   author: aiinbx
   # Versioned apart from the CLI: bump on content changes, not releases.
-  version: "1.1.0"
+  version: "1.2.0"
   homepage: https://docs.aiinbx.com/cli
   source: https://github.com/aiinbx/cli
 inputs:
@@ -131,13 +131,14 @@ Every send carries an idempotency key: `--idempotency-key`, or a generated one, 
 started=$(date -u +%FT%TZ)
 # ...trigger the sign-up / password reset...
 aiinbx wait --to qa@yourdomain.com --subject "verification code" --since "$started" --timeout 2m \
-  | jq -r .stripped_text
+  | jq -er .verification.code
 ```
 
 - Blocks until a matching **inbound** email arrives (`--direction outbound` for sent mail). Prints the full email as JSON and exits 0. Exits **124** at `--timeout` (default 2m); the message says so if the API was failing at the end. Exits **1** with the API's error if it never answered — an outage, not a missing email.
 - `--from`, `--to`, `--subject`: each matches a case-insensitive part of its field (`--to`: a recipient in `to`, not `cc`). `--thread <id>` stays in one thread.
 - Without `--since` it only counts mail that arrives after it starts. **Record the time before you trigger the email and pass it as `--since`**, or a fast email is missed.
-- Read the code from `stripped_text` (quotes and signature removed), not `html`.
+- A verification email carries `verification: {code, link}`, picked out of the mail: read `.verification.code`, or `.verification.link` for link-only flows. Either can be `null`: jq then prints `null` and `-e` exits 1. Fall back to `stripped_text` (quotes and signature removed) for a code, and to the links in `html` for a link.
+- An out-of-office or auto-reply carries `unavailable: {reason, back_on, contacts}` when it says its sender can't be reached.
 
 ### Forward webhooks to localhost
 
