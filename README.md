@@ -13,4 +13,4 @@ irm https://aiinbx.com/install.ps1 | iex
 
 More: https://aiinbx.com/features/cli
 
-This repository holds the release binaries and the agent skill (`npx skills add aiinbx/cli`).
+This repository holds the release binaries. The agent skill for the CLI is in [aiinbx/skills](https://github.com/aiinbx/skills): `npx skills add aiinbx/skills`.
